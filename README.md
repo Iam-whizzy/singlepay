@@ -1,4 +1,5 @@
 # singlepay
 
 Revolutionizing payment
-![singlepaymainlogo](https://user-images.githubusercontent.com/42470125/121470628-2b79a780-c9c7-11eb-96ad-5032b37259aa.jpg)
+![singlepaymainlogotransparentwhitefont](https://user-images.githubusercontent.com/42470125/121701286-6a981d80-cad9-11eb-9fd8-e43c2be025f8.png)
+
