@@ -737,9 +737,9 @@ void _navigateToRequestScreen(BuildContext context) {
       .push(MaterialPageRoute(builder: (context) => ReceiveApp()));
 }
 
-void _navigateToTopUpScreen(BuildContext context) {
+void _navigateToFormPageScreen(BuildContext context) {
   Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => TopUpScreen()));
+      .push(MaterialPageRoute(builder: (context) => FormPage()));
 }
 
 void _navigateToPayScreen(BuildContext context) {
