@@ -12,6 +12,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: ^0.13.0
+  intl:
+  webview_flutter:
+  shared_preferences:
 
   cupertino_icons: ^1.0.2
   google_fonts: ^2.0.0    
