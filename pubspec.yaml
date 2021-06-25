@@ -16,6 +16,7 @@ dependencies:
   intl:
   webview_flutter:
   shared_preferences:
+  provider: ^4.3.1
 
   cupertino_icons: ^1.0.2
   google_fonts: ^2.0.0    

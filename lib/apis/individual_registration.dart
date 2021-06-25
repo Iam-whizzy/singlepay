@@ -1,5 +1,6 @@
-
 import 'dart:convert';
+import 'dart:async';
+//import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 //import 'InputDeco_design.dart';
@@ -16,7 +17,6 @@ class _FormPageState extends State<FormPage> {
   TextEditingController _password = TextEditingController();
   TextEditingController _email = TextEditingController();
   TextEditingController _phone = TextEditingController();
-
   TextEditingController _confirmpassword = TextEditingController();
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
@@ -60,17 +60,17 @@ class _FormPageState extends State<FormPage> {
                   padding:
                       const EdgeInsets.only(bottom: 15, left: 10, right: 10),
                   child: TextFormField(
-                    controller: _name,
+                    controller: _password,
                     keyboardType: TextInputType.text,
                     decoration: new InputDecoration(
-                        icon: new Icon(Icons.person), labelText: "Full Name"),
+                        icon: new Icon(Icons.lock), labelText: "Password"),
                     validator: (String value) {
                       if (value.isEmpty) {
-                        return "Please enter name";
+                        return "Please enter password";
                       }
+
                       return null;
                     },
-                    onSaved: (String name) {},
                   ),
                 ),
                 Padding(
@@ -98,6 +98,23 @@ class _FormPageState extends State<FormPage> {
                   padding:
                       const EdgeInsets.only(bottom: 15, left: 10, right: 10),
                   child: TextFormField(
+                    controller: _name,
+                    keyboardType: TextInputType.text,
+                    decoration: new InputDecoration(
+                        icon: new Icon(Icons.person), labelText: "Full Name"),
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return "Please enter name";
+                      }
+                      return null;
+                    },
+                    onSaved: (String name) {},
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 15, left: 10, right: 10),
+                  child: TextFormField(
                     controller: _phone,
                     keyboardType: TextInputType.number,
                     decoration: new InputDecoration(
@@ -112,23 +129,6 @@ class _FormPageState extends State<FormPage> {
                       return null;
                     },
                     onSaved: (String phone) {},
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 15, left: 10, right: 10),
-                  child: TextFormField(
-                    controller: _password,
-                    keyboardType: TextInputType.text,
-                    decoration: new InputDecoration(
-                        icon: new Icon(Icons.lock), labelText: "Password"),
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return "Please enter password";
-                      }
-
-                      return null;
-                    },
                   ),
                 ),
                 Padding(
@@ -182,20 +182,20 @@ class _FormPageState extends State<FormPage> {
 
   Future registrationUser() async {
     // url to registration php script
-    var APIURL =
+    var apiUrl =
         "https://payherokenya.com/singlepay/app/individual_registration.php";
     //json maping user entered details
     Map mapeddate = {
-      'username': _username,
+      'username': _username.text,
       'password': _password.text,
       'email': _email.text,
       'full_name': _name.text,
-      'phone': _phone.text,
+      'phone': _phone.text
     };
     //send  data using http post to our php code
-    http.Response reponse = await http.post(Uri.parse(APIURL), body: mapeddate);
+    http.Response reponse = await http.post(Uri.parse(apiUrl), body: mapeddate);
     //getting response from php code, here
-    var data = jsonDecode(reponse.body);
+    var data = jsonEncode(reponse.body);
     print("DATA: $data");
   }
 }

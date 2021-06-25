@@ -1,7 +1,8 @@
 import 'package:singlepay/screens/request.dart';
 import 'package:singlepay/screens/send.dart';
-import 'package:singlepay/screens/topUp.dart';
+//import 'package:singlepay/screens/topUp.dart';
 import 'package:singlepay/screens/pay.dart';
+import 'package:singlepay/apis/individual_registration.dart';
 
 import 'package:flutter/material.dart';
 
@@ -20,13 +21,14 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                   children: <Widget>[
                     new Image.asset(
                       'assets/singlepaymainlogo6.png',
-                      height: 50.0,
-                      width: 200.0,
-                      fit: BoxFit.contain,
+                      height: 5.0,
+                      width: 20.0,
+                      //fit: BoxFit.contain,
                     ),
                     Container(
                       child: Row(
@@ -44,7 +46,9 @@ class HomeScreen extends StatelessWidget {
                             child: ClipOval(
                               child: Image.asset(
                                 "assets/dp2.jpg",
-                                fit: BoxFit.contain,
+                                //fit: BoxFit.contain,
+                                height: 10,
+                                width: 10,
                               ),
                             ),
                           )
@@ -133,7 +137,7 @@ class HomeScreen extends StatelessWidget {
                                     BorderRadius.all(Radius.circular(18))),
                             child: IconButton(
                               onPressed: () {
-                                _navigateToTopUpScreen(context);
+                                _navigateToFormPageScreen(context);
                                 // navigateToSend(context);
                               },
                               icon: Icon(Icons.trending_up),
