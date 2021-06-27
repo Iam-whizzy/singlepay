@@ -28,12 +28,12 @@ class AuthProvider with ChangeNotifier {
   Status get registeredInStatus => _registeredInStatus;
 
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(String username, String password) async {
     var result;
 
     final Map<String, dynamic> loginData = {
       'user': {
-        'email': email,
+        'username': username,
         'password': password
       }
     };
@@ -42,7 +42,7 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     Response response = await post(
-      AppUrl.login,
+      Uri.parse(AppUrl.login),
       body: json.encode(loginData),
       headers: {'Content-Type': 'application/json'},
     );
@@ -71,16 +71,19 @@ class AuthProvider with ChangeNotifier {
     return result;
   }
 
-  Future<Map<String, dynamic>> register(String email, String password, String passwordConfirmation) async {
+  Future<Map<String, dynamic>> register(String username, String email, String password, String passwordConfirmation, String full_name, String phone) async {
 
     final Map<String, dynamic> registrationData = {
       'user': {
-        'email': email,
+        'username': username,
         'password': password,
-        'password_confirmation': passwordConfirmation
+        'password_confirmation': passwordConfirmation,
+        'email': email,
+        'full_name': full_name,
+        'phone': phone
       }
     };
-    return await post(AppUrl.register,
+    return await post(Uri.parse(AppUrl.register),
         body: json.encode(registrationData),
         headers: {'Content-Type': 'application/json'})
         .then(onValue)

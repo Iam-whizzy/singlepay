@@ -15,7 +15,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final formKey = new GlobalKey<FormState>();
 
-  String _username, _password, _confirmPassword;
+  String _username, _password, _confirmPassword, _email, _full_name, _phone;
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +25,9 @@ class _RegisterState extends State<Register> {
       autofocus: false,
       validator: validateEmail,
       onSaved: (value) => _username = value,
-      decoration: buildInputDecoration("Confirm password", Icons.email),
+      decoration: buildInputDecoration("Enter username", Icons.email),
     );
-
+    
     final passwordField = TextFormField(
       autofocus: false,
       obscureText: true,
@@ -42,6 +42,25 @@ class _RegisterState extends State<Register> {
       onSaved: (value) => _confirmPassword = value,
       obscureText: true,
       decoration: buildInputDecoration("Confirm password", Icons.lock),
+    );
+    final emailField = TextFormField(
+      autofocus: false,
+      validator: validateEmail,
+      onSaved: (value) => _email = value,
+      decoration: buildInputDecoration("Enter Email", Icons.email),
+    );
+
+final full_nameField = TextFormField(
+      autofocus: false,
+      validator: (value) => value.isEmpty ? "You Full Name is required" : null,
+      onSaved: (value) => _full_name = value,
+      decoration: buildInputDecoration("Enter your Full Name", Icons.email),
+    );
+final phoneField = TextFormField(
+      autofocus: false,
+      validator: (value) => value.isEmpty ? "You Phone Number is required": null,
+      onSaved: (value) => _phone = value,
+      decoration: buildInputDecoration("Enter your Phone Number", Icons.email),
     );
 
     var loading = Row(
@@ -76,7 +95,7 @@ class _RegisterState extends State<Register> {
       final form = formKey.currentState;
       if (form.validate()) {
         form.save();
-        auth.register(_username, _password, _confirmPassword).then((response) {
+        auth.register(_username, _password, _confirmPassword, _email, _full_name, _phone).then((response) {
           if (response['status']) {
             User user = response['data'];
             Provider.of<UserProvider>(context, listen: false).setUser(user);
@@ -110,7 +129,7 @@ class _RegisterState extends State<Register> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 215.0),
-                  label("Email"),
+                  label("Username"),
                   SizedBox(height: 5.0),
                   usernameField,
                   SizedBox(height: 15.0),
@@ -121,6 +140,18 @@ class _RegisterState extends State<Register> {
                   label("Confirm Password"),
                   SizedBox(height: 10.0),
                   confirmPassword,
+                  SizedBox(height: 10.0),
+                  label("Email"),
+                  SizedBox(height: 10.0),
+                  emailField,
+                   SizedBox(height: 10.0),
+                  label("full_name"),
+                  SizedBox(height: 5.0),
+                  full_nameField,
+                   SizedBox(height: 10.0),
+                  label("phone"),
+                  SizedBox(height: 5.0),
+                  phoneField,
                   SizedBox(height: 20.0),
                   auth.registeredInStatus == Status.Registering
                       ? loading

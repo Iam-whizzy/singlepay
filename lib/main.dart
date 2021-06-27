@@ -15,9 +15,12 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  @override
+
+    @override
+
   Widget build(BuildContext context) {
     Future<User> getUserData() => UserPreferences().getUser();
+        
 
     return MultiProvider(
       providers: [
@@ -25,7 +28,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MaterialApp(
-          title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+          title: 'Singlepay',
           theme: ThemeData(
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
