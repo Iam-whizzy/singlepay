@@ -1,4 +1,6 @@
+########################################### TOKEN BASED AUTHENTICATION #################################################################
 
+-You are expected to implement token based authentication with php for security purposes....
 
 -The lines of json code below is an example of the expected request and the response for the login form
 
