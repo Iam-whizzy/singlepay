@@ -16,7 +16,7 @@
 }
 
 - The attribute "data" is a response returned from the above request
-- the attrubutes "access_token" and "renewable_token" are
+- the attributes "access_token" and "renewable_token" are
 
 //response
 {
