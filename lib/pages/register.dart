@@ -23,7 +23,7 @@ class _RegisterState extends State<Register> {
 
     final usernameField = TextFormField(
       autofocus: false,
-      validator: validateEmail,
+      validator: (value) => value.isEmpty ? "Please enter your username" : null,
       onSaved: (value) => _username = value,
       decoration: buildInputDecoration("Enter username", Icons.email),
     );
@@ -54,13 +54,13 @@ final full_nameField = TextFormField(
       autofocus: false,
       validator: (value) => value.isEmpty ? "You Full Name is required" : null,
       onSaved: (value) => _full_name = value,
-      decoration: buildInputDecoration("Enter your Full Name", Icons.email),
+      decoration: buildInputDecoration("Enter your Full Name", Icons.person),
     );
 final phoneField = TextFormField(
       autofocus: false,
       validator: (value) => value.isEmpty ? "You Phone Number is required": null,
       onSaved: (value) => _phone = value,
-      decoration: buildInputDecoration("Enter your Phone Number", Icons.email),
+      decoration: buildInputDecoration("Enter your Phone Number", Icons.phone),
     );
 
     var loading = Row(
@@ -128,7 +128,7 @@ final phoneField = TextFormField(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 215.0),
+                  SizedBox(height: 25.0),
                   label("Username"),
                   SizedBox(height: 5.0),
                   usernameField,
@@ -145,11 +145,11 @@ final phoneField = TextFormField(
                   SizedBox(height: 10.0),
                   emailField,
                    SizedBox(height: 10.0),
-                  label("full_name"),
+                  label("Full Name"),
                   SizedBox(height: 5.0),
                   full_nameField,
                    SizedBox(height: 10.0),
-                  label("phone"),
+                  label("Phone Number"),
                   SizedBox(height: 5.0),
                   phoneField,
                   SizedBox(height: 20.0),

@@ -1,0 +1,44 @@
+//individual login request payload
+
+{
+    "user": {
+        "username": "singlepay@example.com",
+        "password": "secret1234"
+    }
+}
+
+
+//individual login response payload
+
+{
+    "data": {
+        "access_token": "SFMyNTY.NDg4NDg5NGQtY2FmYy00MzBkLThlZWYtYTNiY2E5YmZhY2Y4.R9YwrQ8kFDrQ4cuJG95c-1hwlksuvTGH6DZR7d-et34",
+        "email": "singlepay@example.com",
+        "id": 17,
+        "renewal_token": "SFMyNTY.YzQ3YWZkODgtYTJjNS00YTVlLTkyYjAtM2Y1M2I1Mzg2Njc2.pgYmvVp0eavCT3GyzPr4ZKLM8fznHgZWwtg3It5LNEs",
+        "type": "individual"
+    }
+}
+
+//individual register request payload
+{
+    "user": {
+        "full_name": "John Doe",
+        "username": "singlepay@example.com",
+        "email": "singlepay@example.com",
+        "phone": "0701234567",
+        "password": "secret1234",
+    }
+}
+
+//individual register response payload
+
+{
+    "data": {
+        "access_token": "SFMyNTY.NDg4NDg5NGQtY2FmYy00MzBkLThlZWYtYTNiY2E5YmZhY2Y4.R9YwrQ8kFDrQ4cuJG95c-1hwlksuvTGH6DZR7d-et34",
+        "email": "singlepay@example.com",
+        "id": 17,
+        "renewal_token": "SFMyNTY.YzQ3YWZkODgtYTJjNS00YTVlLTkyYjAtM2Y1M2I1Mzg2Njc2.pgYmvVp0eavCT3GyzPr4ZKLM8fznHgZWwtg3It5LNEs",
+        "type": "individual"
+    }
+}

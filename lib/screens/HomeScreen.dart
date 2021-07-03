@@ -138,7 +138,7 @@ class HomeScreen extends StatelessWidget {
                             child: IconButton(
                               onPressed: () {
                                 _navigateToFormPageScreen(context);
-                                // navigateToSend(context);
+                                 //navigateToSend(context);
                               },
                               icon: Icon(Icons.trending_up),
                               //Icon: Icons.send,
@@ -743,7 +743,7 @@ void _navigateToRequestScreen(BuildContext context) {
 
 void _navigateToFormPageScreen(BuildContext context) {
   Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => FormPage()));
+      .push(MaterialPageRoute(builder: (context) => RegisterUser()));
 }
 
 void _navigateToPayScreen(BuildContext context) {

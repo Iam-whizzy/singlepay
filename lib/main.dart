@@ -1,61 +1,72 @@
+//import 'package:Singlepay/SplashScreen.dart';
+import 'package:singlepay/screens/CardScreen.dart';
+import 'package:singlepay/screens/HomeScreen.dart';
+//import 'package:Singlepay/src/welcomePage.dart';
+//import 'package:Singlepay/src/welcomePage.dart';
 import 'package:flutter/material.dart';
-import 'package:singlepay/pages/dashboard.dart';
-import 'package:singlepay/pages/login.dart';
-import 'package:singlepay/pages/register.dart';
-import 'package:singlepay/pages/welcome.dart';
-import 'package:singlepay/providers/auth.dart';
-import 'package:singlepay/providers/user_provider.dart';
-import 'package:singlepay/util/shared_preference.dart';
-import 'package:provider/provider.dart';
-
-import 'domain/user.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
+import 'package:google_fonts/google_fonts.dart';
+/*var routes = <String, WidgetBuilder>{
+  "/home": (BuildContext context) => Singlepay(),
+};*/
+void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
-
-    @override
-
+  // This widget is the root of your application.
+  @override
   Widget build(BuildContext context) {
-    Future<User> getUserData() => UserPreferences().getUser();
-        
-
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-          title: 'Singlepay',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: FutureBuilder(
-              future: getUserData(),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return CircularProgressIndicator();
-                  default:
-                    if (snapshot.hasError)
-                      return Text('Error: ${snapshot.error}');
-                    else if (snapshot.data.token == null)
-                      return Login();
-                    else
-                      UserPreferences().removeUser();
-                    return Welcome(user: snapshot.data);
-                }
-              }),
-          routes: {
-            '/dashboard': (context) => DashBoard(),
-            '/login': (context) => Login(),
-            '/register': (context) => Register(),
-          }),
+    final textTheme = Theme.of(context).textTheme;
+    return MaterialApp(
+      title: 'Singlepay',
+      theme: ThemeData(
+        //Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        primarySwatch: Colors.blue,
+        textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
+          bodyText1: GoogleFonts.montserrat(textStyle: textTheme.bodyText1),
+        ),
+      ),
+      home: Singlepay(),
+      //home: Singlepay(),
+      //routes: routes,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
+class Singlepay extends StatefulWidget {
+  @override
+  _SinglepayState createState() => _SinglepayState();
+}
+class _SinglepayState extends State<Singlepay> {
+  var screens = [
+    HomeScreen(),
+    CardScreen(),
+  ]; //screens for each tab
+  int selectedTab = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color.fromRGBO(38, 81, 158, 1),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("Home")),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_balance_wallet), title: Text("Account")),
+        ],
+        onTap: (index) {
+          setState(() {
+            selectedTab = index;
+          });
+        },
+        showUnselectedLabels: true,
+        iconSize: 30,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        elevation: 3,
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: screens[selectedTab],
+    );
+  }
+}
+

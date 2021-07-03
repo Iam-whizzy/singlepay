@@ -5,7 +5,7 @@ String validateEmail(String value) {
   if (value.isEmpty) {
     _msg = "Your username is required";
   } else if (!regex.hasMatch(value)) {
-    _msg = "Please provide a valid emal address";
+    _msg = "Please provide a valid email address";
   }
   return _msg;
 }

@@ -51,8 +51,7 @@ class _LoginState extends State<Login> {
           padding: EdgeInsets.all(0.0),
           child: Text("Forgot password?",
               style: TextStyle(fontWeight: FontWeight.w300)),
-          onPressed: () {
-//            Navigator.pushReplacementNamed(context, '/reset-password');
+          onPressed: () {        Navigator.pushReplacementNamed(context, '/reset-password');
           },
         ),
         FlatButton(

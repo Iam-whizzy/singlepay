@@ -4,11 +4,12 @@ class User {
   String email;
   String phone;
   String full_name;
-  String type;
-  String token;
-  String renewalToken;
+  String password;
+  //String type;
+  //String token;
+  //String renewalToken;
 
-  User({this.username, this.email, this.phone, this.full_name, this.type, this.token, this.renewalToken});
+  User({this.username, this.email, this.phone, this.full_name, this.password});
 
   factory User.fromJson(Map<String, dynamic> responseData) {
     return User(
@@ -17,9 +18,10 @@ class User {
         email: responseData['email'],
         phone: responseData['phone'],
         full_name: responseData['full_name'],
-        type: responseData['type'],
-        token: responseData['access_token'],
-        renewalToken: responseData['renewal_token']
-    );
+        password: responseData['password']
+        //type: responseData['type'],
+        // token: responseData['access_token'],
+        //renewalToken: responseData['renewal_token']
+        );
   }
 }

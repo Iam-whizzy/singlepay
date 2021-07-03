@@ -1,201 +1,151 @@
-import 'dart:convert';
-import 'dart:async';
-//import 'package:provider/provider.dart';
-
 import 'package:flutter/material.dart';
-//import 'InputDeco_design.dart';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class FormPage extends StatefulWidget {
-  @override
-  _FormPageState createState() => _FormPageState();
+
+Widget build(BuildContext context) {
+return MaterialApp(
+  home: Scaffold(
+      appBar: AppBar(title: Text('User Registration Form')),
+      body: Center(
+        child: RegisterUser()
+        )
+      )
+    );
 }
 
-class _FormPageState extends State<FormPage> {
-  TextEditingController _username = TextEditingController();
-  TextEditingController _name = TextEditingController();
-  TextEditingController _password = TextEditingController();
-  TextEditingController _email = TextEditingController();
-  TextEditingController _phone = TextEditingController();
-  TextEditingController _confirmpassword = TextEditingController();
 
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+class RegisterUser extends StatefulWidget {
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formkey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                /*CircleAvatar(
-                  radius: 70,
-                  child: Image.asset('assets/singlepaymainlogo.jpg',
-                      width: 50, height: 5),
-                ),*/
-                SizedBox(
-                  height: 15,
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 15, left: 10, right: 10),
-                  child: TextFormField(
-                    controller: _username,
-                    keyboardType: TextInputType.text,
-                    decoration: new InputDecoration(
-                        icon: new Icon(Icons.person), labelText: "Username"),
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return "Please enter your user name";
-                      }
-                      return null;
-                    },
-                    onSaved: (String username) {},
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 15, left: 10, right: 10),
-                  child: TextFormField(
-                    controller: _password,
-                    keyboardType: TextInputType.text,
-                    decoration: new InputDecoration(
-                        icon: new Icon(Icons.lock), labelText: "Password"),
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return "Please enter password";
-                      }
+RegisterUserState createState() => RegisterUserState();
 
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 15, left: 10, right: 10),
-                  child: TextFormField(
-                    controller: _email,
-                    keyboardType: TextInputType.text,
-                    decoration: new InputDecoration(
-                        icon: new Icon(Icons.email), labelText: "Email"),
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return "Please enter  email";
-                      }
-                      if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                          .hasMatch(value)) {
-                        return "Please enter valid email";
-                      }
-                      return null;
-                    },
-                    onSaved: (String email) {},
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 15, left: 10, right: 10),
-                  child: TextFormField(
-                    controller: _name,
-                    keyboardType: TextInputType.text,
-                    decoration: new InputDecoration(
-                        icon: new Icon(Icons.person), labelText: "Full Name"),
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return "Please enter name";
-                      }
-                      return null;
-                    },
-                    onSaved: (String name) {},
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 15, left: 10, right: 10),
-                  child: TextFormField(
-                    controller: _phone,
-                    keyboardType: TextInputType.number,
-                    decoration: new InputDecoration(
-                        icon: new Icon(Icons.phone), labelText: "Phone Number"),
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return "Please enter  phone";
-                      }
-                      if (value.length < 10) {
-                        return "Please enter valid phone";
-                      }
-                      return null;
-                    },
-                    onSaved: (String phone) {},
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 15, left: 10, right: 10),
-                  child: TextFormField(
-                    controller: _confirmpassword,
-                    obscureText: true,
-                    keyboardType: TextInputType.text,
-                    decoration: new InputDecoration(
-                        icon: new Icon(Icons.lock),
-                        labelText: "Confirm Password"),
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return "Please re-enter password";
-                      }
-                      if (_password.text != _confirmpassword.text) {
-                        return "Password Do not match";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: 200,
-                  height: 50,
-                  child: RaisedButton(
-                    color: Colors.redAccent,
-                    onPressed: () {
-                      if (_formkey.currentState.validate()) {
-                        registrationUser();
-                        print("Successful");
-                      } else {
-                        print("Unsuccessfull");
-                      }
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50.0),
-                        side: BorderSide(color: Colors.blue, width: 2)),
-                    textColor: Colors.white,
-                    child: Text("Submit"),
-                  ),
-                )
-              ],
-            ),
-          ),
+}
+
+class RegisterUserState extends State {
+
+  // Boolean variable for CircularProgressIndicator.
+  bool visible = false ;
+
+  // Getting value from TextField widget.
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+Future userRegistration() async{
+
+  // Showing CircularProgressIndicator.
+  setState(() {
+  visible = true ; 
+  });
+
+  // Getting value from Controller
+  String name = nameController.text;
+  String email = emailController.text;
+  String password = passwordController.text;
+
+  // SERVER API URL
+  var url = 'https://flutter-examples.000webhostapp.com/register_user.php';
+
+  // Store all data with Param Name.
+  var data = {'name': name, 'email': email, 'password' : password};
+
+  // Starting Web API Call.
+  var response = await http.post(Uri.parse(url), body: json.encode(data));
+
+  // Getting Server response into variable.
+  var message = jsonDecode(response.body);
+
+  // If Web call Success than Hide the CircularProgressIndicator.
+  if(response.statusCode == 200){
+  setState(() {
+    visible = false; 
+  });
+}
+
+  // Showing Alert Dialog with Response JSON Message.
+  showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return AlertDialog(
+      title: new Text(message),
+      actions: <Widget>[
+        FlatButton(
+          child: new Text("OK"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
-      ),
+      ],
     );
-  }
+  },
+  );
 
-  Future registrationUser() async {
-    // url to registration php script
-    var apiUrl =
-        "https://payherokenya.com/singlepay/app/individual_registration.php";
-    //json maping user entered details
-    Map mapeddate = {
-      'username': _username.text,
-      'password': _password.text,
-      'email': _email.text,
-      'full_name': _name.text,
-      'phone': _phone.text
-    };
-    //send  data using http post to our php code
-    http.Response reponse = await http.post(Uri.parse(apiUrl), body: mapeddate);
-    //getting response from php code, here
-    var data = jsonEncode(reponse.body);
-    print("DATA: $data");
-  }
+}
+
+@override
+Widget build(BuildContext context) {
+return Scaffold(
+  body: SingleChildScrollView(
+    child: Center(
+    child: Column(
+      children: <Widget>[
+
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Text('User Registration Form', 
+                  style: TextStyle(fontSize: 21))),
+
+        Divider(),          
+
+        Container(
+        width: 280,
+        padding: EdgeInsets.all(10.0),
+        child: TextField(
+            controller: nameController,
+            autocorrect: true,
+            decoration: InputDecoration(hintText: 'Enter Your Name Here'),
+          )
+        ),
+
+        Container(
+        width: 280,
+        padding: EdgeInsets.all(10.0),
+        child: TextField(
+            controller: emailController,
+            autocorrect: true,
+            decoration: InputDecoration(hintText: 'Enter Your Email Here'),
+          )
+        ),
+
+        Container(
+        width: 280,
+        padding: EdgeInsets.all(10.0),
+        child: TextField(
+            controller: passwordController,
+            autocorrect: true,
+            obscureText: true,
+            decoration: InputDecoration(hintText: 'Enter Your Password Here'),
+          )
+        ),
+
+        RaisedButton(
+          onPressed: userRegistration,
+          color: Colors.green,
+          textColor: Colors.white,
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          child: Text('Click Here To Register User Online'),
+        ),
+
+        Visibility(
+          visible: visible, 
+          child: Container(
+            margin: EdgeInsets.only(bottom: 30),
+            child: CircularProgressIndicator()
+            )
+          ),
+
+      ],
+    ),
+  )));
+}
 }
