@@ -1,0 +1,30 @@
+########################################### TOKEN BASED AUTHENTICATION #################################################################
+
+-You are expected to implement token based authentication with php for security purposes....
+
+-The lines of json code below is an example of the expected request and the response for the login form
+
+-The attribute "user" contains the values "email" and "password" which are attributes with the values "wiztyping@gmail.com" and "test123"
+
+
+//request
+{
+    "user": {
+        "email": "wiztyping@gmail.com",
+        "password": "test123"
+    }
+}
+
+- The attribute "data" is a response returned from the above request
+- the attributes "access_token" and "renewable_token" are
+
+//response
+{
+    "data": {
+        "access_token": "SFMyNTY.ZmU3OWY5NDUtNTJlOC00Yzc1LThhZmUtZmE4NzBkZmRiZmZj.W6dWivDyLMXP7qadazaFic5Jmmz6WNMAHAhxJPRe9yU",
+        "email": "wiztyping@gmail.com,
+        "id": 1,
+        "renewal_token": "SFMyNTY.MzA4MWExOTctY2U4NC00Y2NlLTk1MTEtYWI4M2RlNWE1Nzlk.GsTsOi5jLyb_ZC9m8IjN3QZVTY4EOLzfSY_Y_fmnGSc",
+        "type": "individual"
+    }
+}
