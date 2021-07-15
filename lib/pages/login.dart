@@ -1,126 +1,139 @@
-import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart';
-import 'package:singlepay/domain/user.dart';
-import 'package:singlepay/providers/auth.dart';
-import 'package:singlepay/providers/user_provider.dart';
-import 'package:singlepay/util/validators.dart';
-import 'package:singlepay/util/widgets.dart';
-import 'package:provider/provider.dart';
+import 'dart:convert';
 
-class Login extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:singlepay/screens/pay.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class LoginPage extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginState extends State<Login> {
-  final formKey = new GlobalKey<FormState>();
-
-  String _username, _password;
+class _LoginPageState extends State<LoginPage> {
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    AuthProvider auth = Provider.of<AuthProvider>(context);
-
-    final usernameField = TextFormField(
-      autofocus: false,
-      validator: validateEmail,
-      onSaved: (value) => _username = value,
-      decoration: buildInputDecoration("Confirm password", Icons.email),
-    );
-
-    final passwordField = TextFormField(
-      autofocus: false,
-      obscureText: true,
-      validator: (value) => value.isEmpty ? "Please enter password" : null,
-      onSaved: (value) => _password = value,
-      decoration: buildInputDecoration("Confirm password", Icons.lock),
-    );
-
-    var loading = Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        CircularProgressIndicator(),
-        Text(" Authenticating ... Please wait")
-      ],
-    );
-
-    final forgotLabel = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        FlatButton(
-          padding: EdgeInsets.all(0.0),
-          child: Text("Forgot password?",
-              style: TextStyle(fontWeight: FontWeight.w300)),
-          onPressed: () {        Navigator.pushReplacementNamed(context, '/reset-password');
-          },
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light
+        .copyWith(statusBarColor: Colors.transparent));
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Colors.blue, Colors.teal],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter),
         ),
-        FlatButton(
-          padding: EdgeInsets.only(left: 0.0),
-          child: Text("Sign up", style: TextStyle(fontWeight: FontWeight.w300)),
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, '/register');
-          },
-        ),
-      ],
-    );
-
-    var doLogin = () {
-      final form = formKey.currentState;
-
-      if (form.validate()) {
-        form.save();
-
-        final Future<Map<String, dynamic>> successfulMessage =
-            auth.login(_username, _password);
-
-        successfulMessage.then((response) {
-          if (response['status']) {
-            User user = response['user'];
-            Provider.of<UserProvider>(context, listen: false).setUser(user);
-            Navigator.pushReplacementNamed(context, '/dashboard');
-          } else {
-            Flushbar(
-              title: "Failed Login",
-              message: response['message']['message'].toString(),
-              duration: Duration(seconds: 3),
-            ).show(context);
-          }
-        });
-      } else {
-        print("form is invalid");
-      }
-    };
-
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(40.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 250.0),
-                  label("Email"),
-                  SizedBox(height: 5.0),
-                  usernameField,
-                  SizedBox(height: 20.0),
-                  label("Password"),
-                  SizedBox(height: 5.0),
-                  passwordField,
-                  SizedBox(height: 20.0),
-                  auth.loggedInStatus == Status.Authenticating
-                      ? loading
-                      : longButtons("Login", doLogin),
-                  SizedBox(height: 5.0),
-                  forgotLabel
+        child: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : ListView(
+                children: <Widget>[
+                  headerSection(),
+                  textSection(),
+                  buttonSection(),
                 ],
               ),
+      ),
+    );
+  }
+
+  signIn(String username, pass) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    Map data = {'email': username, 'password': pass};
+    var jsonResponse;
+    var response = await http.post((Uri.parse("https://payherokenya.com/singlepay/app/authentication.php")), body: data);
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      if (jsonResponse != null) {
+        setState(() {
+          _isLoading = false;
+        });
+        sharedPreferences.setString("token", jsonResponse['token']);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => MainPage()),
+            (Route<dynamic> route) => false);
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      print(response.body);
+    }
+  }
+
+  Container buttonSection() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 40.0,
+      padding: EdgeInsets.symmetric(horizontal: 15.0),
+      margin: EdgeInsets.only(top: 15.0),
+      child: RaisedButton(
+        onPressed: usernameController.text == "" || passwordController.text == ""
+            ? null
+            : () {
+                setState(() {
+                  _isLoading = true;
+                });
+                signIn(usernameController.text, passwordController.text);
+              },
+        elevation: 0.0,
+        color: Colors.purple,
+        child: Text("Sign In", style: TextStyle(color: Colors.white70)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+      ),
+    );
+  }
+
+  final TextEditingController usernameController = new TextEditingController();
+  final TextEditingController passwordController = new TextEditingController();
+
+  Container textSection() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+      child: Column(
+        children: <Widget>[
+          TextFormField(
+            controller: usernameController,
+            cursorColor: Colors.white,
+            style: TextStyle(color: Colors.white70),
+            decoration: InputDecoration(
+              icon: Icon(Icons.email, color: Colors.white70),
+              hintText: "Email",
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white70)),
+              hintStyle: TextStyle(color: Colors.white70),
             ),
           ),
-        ),
+          SizedBox(height: 30.0),
+          TextFormField(
+            controller: passwordController,
+            cursorColor: Colors.white,
+            obscureText: true,
+            style: TextStyle(color: Colors.white70),
+            decoration: InputDecoration(
+              icon: Icon(Icons.lock, color: Colors.white70),
+              hintText: "Password",
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white70)),
+              hintStyle: TextStyle(color: Colors.white70),
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  Container headerSection() {
+    return Container(
+      margin: EdgeInsets.only(top: 50.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+      child: Text("Code Land",
+          style: TextStyle(
+              color: Colors.white70,
+              fontSize: 40.0,
+              fontWeight: FontWeight.bold)),
     );
   }
 }

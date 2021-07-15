@@ -748,5 +748,5 @@ void _navigateToFormPageScreen(BuildContext context) {
 
 void _navigateToPayScreen(BuildContext context) {
   Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => PayScreen()));
+      .push(MaterialPageRoute(builder: (context) => MainPage()));
 }
